@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Avrae Completo - Comandos e Flags</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #1a252f;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --magic: #9b59b6;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a2a3a, #2c3e50);
+            color: var(--light);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            border-bottom: 3px solid var(--secondary);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            color: var(--light);
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--secondary);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .search-box {
+            max-width: 600px;
+            margin: 25px auto;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px;
+            border-radius: 50px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            padding-left: 50px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.5);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--secondary);
+        }
+
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .category-btn {
+            padding: 10px 20px;
+            background: rgba(52, 152, 219, 0.2);
+            border: 1px solid var(--secondary);
+            color: var(--light);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .category-btn:hover, .category-btn.active {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Nova seção de conceitos gerais */
+        .concepts-section {
+            background: rgba(26, 37, 47, 0.8);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            border: 1px solid var(--magic);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--magic);
+        }
+
+        .section-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--magic);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            font-size: 1.8rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: var(--light);
+        }
+
+        .flags-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .flag-card {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 4px solid var(--warning);
+            transition: transform 0.3s ease;
+        }
+
+        .flag-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .flag-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .flag-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--warning);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+
+        .flag-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--warning);
+        }
+
+        .flag-desc {
+            margin-bottom: 15px;
+            color: #bdc3c7;
+        }
+
+        .flag-examples {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .flag-example {
+            font-family: 'Courier New', monospace;
+            display: block;
+            margin-bottom: 8px;
+            color: var(--success);
+        }
+
+        .command-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .command-card {
+            background: rgba(26, 37, 47, 0.8);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .command-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            border-color: rgba(52, 152, 219, 0.5);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .icon {
+            width: 50px;
+            height: 50px;
+            background: var(--secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.5rem;
+        }
+
+        .command-name {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--light);
+        }
+
+        .command-desc {
+            margin-bottom: 15px;
+            color: #bdc3c7;
+            min-height: 60px;
+        }
+
+        .example-box {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 3px solid var(--accent);
+        }
+
+        .example-title {
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .example-code {
+            font-family: 'Courier New', monospace;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 8px 12px;
+            border-radius: 4px;
+            display: block;
+            overflow-x: auto;
+            color: var(--warning);
+        }
+
+        .category-tag {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 5px 12px;
+            background: rgba(231, 76, 60, 0.2);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--accent);
+            border: 1px solid rgba(231, 76, 60, 0.3);
+        }
+
+        .mobile-warning {
+            display: none;
+            background: var(--warning);
+            color: var(--dark);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 40px;
+            color: #7f8c8d;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Mensagem de nenhum resultado */
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            background: rgba(231, 76, 60, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(231, 76, 60, 0.3);
+            margin: 20px 0;
+        }
+
+        .no-results i {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+
+        .no-results h3 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .no-results p {
+            color: #bdc3c7;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .command-grid, .flags-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .mobile-warning {
+                display: block;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+                padding: 0 15px;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .section-icon {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            
+            .categories {
+                overflow-x: auto;
+                justify-content: flex-start;
+                padding-bottom: 10px;
+                margin: 0 15px 25px;
+            }
+            
+            .category-btn {
+                flex-shrink: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-dragon"></i> Guia Completo Avrae</h1>
+            <p class="subtitle">Comandos essenciais e explicação detalhada sobre flags e conceitos do bot de RPG para Discord</p>
+            
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Pesquisar comando ou flag...">
+            </div>
+            
+            <div class="categories" id="categoriesContainer">
+                <div class="category-btn active" data-category="all">Todos</div>
+                <div class="category-btn" data-category="dados">Dados</div>
+                <div class="category-btn" data-category="combate">Combate</div>
+                <div class="category-btn" data-category="personagem">Personagem</div>
+                <div class="category-btn" data-category="magias">Magias</div>
+                <div class="category-btn" data-category="flags">Flags</div>
+            </div>
+        </header>
+        
+        <div class="mobile-warning">
+            <i class="fas fa-mobile-alt"></i> Toque nas seções para expandir os detalhes!
+        </div>
+        
+        <!-- Nova Seção: Conceitos Gerais e Flags Comuns -->
+        <div class="concepts-section" id="conceptsSection">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i class="fas fa-flag"></i>
+                </div>
+                <h2 class="section-title">Conceitos Gerais e Flags Comuns</h2>
+            </div>
+            
+            <p style="margin-bottom: 20px; font-size: 1.1rem;">
+                As <strong>flags</strong> são modificadores que você pode adicionar aos comandos do Avrae para personalizar suas ações. 
+                Elas começam com hífen (-) e permitem controlar diversos aspectos dos comandos.
+            </p>
+            
+            <div class="flags-grid" id="flagsGrid">
+                <!-- Flag -t -->
+                <div class="flag-card" data-category="flags">
+                    <div class="flag-header">
+                        <div class="flag-icon">
+                            <i class="fas fa-crosshairs"></i>
+                        </div>
+                        <h3 class="flag-name">-t</h3>
+                    </div>
+                    <p class="flag-desc">Define um ou mais alvos para o comando. Use para especificar quem será afetado por ataques, magias ou efeitos.</p>
+                    <div class="flag-examples">
+                        <span class="example-title">Exemplos:</span>
+                        <code class="flag-example">!attack "Espada" -t "Orc 1"</code>
+                        <code class="flag-example">!cast "Cura" -t "Jogador1" "Jogador2"</code>
+                        <code class="flag-example">!init effect "Goblin 3" "Medo"</code>
+                    </div>
+                </div>
+                
+                <!-- Flag -n -->
+                <div class="flag-card" data-category="flags">
+                    <div class="flag-header">
+                        <div class="flag-icon">
+                            <i class="fas fa-hashtag"></i>
+                        </div>
+                        <h3 class="flag-name">-n</h3>
+                    </div>
+                    <p class="flag-desc">Especifica quantidade ou nome personalizado. Usada para criar múltiplas instâncias ou dar nomes a monstros/NPCs.</p>
+                    <div class="flag-examples">
+                        <span class="example-title">Exemplos:</span>
+                        <code class="flag-example">!init madd "Goblin" -n 5</code>
+                        <code class="flag-example">!attack -n "Flecha Flamejante"</code>
+                        <code class="flag-example">!monster "Dragão" -n "Smaug"</code>
+                    </div>
+                </div>
+                
+                <!-- Flag -l -->
+                <div class="flag-card" data-category="flags">
+                    <div class="flag-header">
+                        <div class="flag-icon">
+                            <i class="fas fa-layer-group"></i>
+                        </div>
+                        <h3 class="flag-name">-l</h3>
+                    </div>
+                    <p class="flag-desc">Define o nível de uma magia. Usada com o comando !cast para conjurar magias em níveis superiores.</p>
+                    <div class="flag-examples">
+                        <span class="example-title">Exemplos:</span>
+                        <code class="flag-example">!cast "Bola de Fogo" -l 5</code>
+                        <code class="flag-example">!cast "Cura" -l 3 -t "Aliado"</code>
+                        <code class="flag-example">!cast "Raio de Gelo" -l 2</code>
+                    </div>
+                </div>
+                
+                <!-- Flag adv/dis -->
+                <div class="flag-card" data-category="flags">
+                    <div class="flag-header">
+                        <div class="flag-icon">
+                            <i class="fas fa-balance-scale"></i>
+                        </div>
+                        <h3 class="flag-name">adv / dis</h3>
+                    </div>
+                    <p class="flag-desc">Rola com vantagem (adv) ou desvantagem (dis). Pode ser usado em rolagens de ataque, testes de perícia e salvaguardas.</p>
+                    <div class="flag-examples">
+                        <span class="example-title">Exemplos:</span>
+                        <code class="flag-example">!check percepção adv</code>
+                        <code class="flag-example">!attack "Arco" dis</code>
+                        <code class="flag-example">!save destreza adv</code>
+                    </div>
+                </div>
+                
+                <!-- Flag -rr -->
+                <div class="flag-card" data-category="flags">
+                    <div class="flag-header">
+                        <div class="flag-icon">
+                            <i class="fas fa-redo"></i>
+                        </div>
+                        <h3 class="flag-name">-rr</h3>
+                    </div>
+                    <p class="flag-desc">Repete um comando múltiplas vezes. Ideal para ataques múltiplos ou rolagens em sequência.</p>
+                    <div class="flag-examples">
+                        <span class="example-title">Exemplos:</span>
+                        <code class="flag-example">!attack "Adaga" -rr 2</code>
+                        <code class="flag-example">!r 1d20 -rr 4</code>
+                        <code class="flag-example">!check arcana -rr 3</code>
+                    </div>
+                </div>
+                
+                <!-- Flag -i -->
+                <div class="flag-card" data-category="flags">
+                    <div class="flag-header">
+                        <div class="flag-icon">
+                            <i class="fas fa-infinity"></i>
+                        </div>
+                        <h3 class="flag-name">-i</h3>
+                    </div>
+                    <p class="flag-desc">Ignora custos de recursos (como slots de magia). Útil para testes ou quando o Mestre permite gasto livre.</p>
+                    <div class="flag-examples">
+                        <span class="example-title">Exemplos:</span>
+                        <code class="flag-example">!cast "Teletransporte" -i</code>
+                        <code class="flag-example">!action surge -i</code>
+                        <code class="flag-example">!channel divinity -i</code>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="concept-tip" style="margin-top: 25px; padding: 15px; background: rgba(52, 152, 219, 0.2); border-radius: 10px; border-left: 3px solid var(--secondary);">
+                <h3 style="color: var(--secondary); margin-bottom: 10px;"><i class="fas fa-lightbulb"></i> Dica Importante</h3>
+                <p>Você pode combinar várias flags em um único comando! Por exemplo:</p>
+                <code class="example-code" style="margin-top: 10px; display: block;">!cast "Bola de Fogo" -l 5 -t "Goblin 1" "Goblin 2" -i</code>
+                <p style="margin-top: 10px;">Este comando conjura Bola de Fogo no 5° nível, nos Goblins 1 e 2, ignorando o custo do slot de magia.</p>
+            </div>
+        </div>
+        
+        <h2 style="text-align: center; margin: 40px 0 20px; color: var(--light); font-size: 2rem; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
+            <i class="fas fa-terminal"></i> Comandos Essenciais
+        </h2>
+        
+        <div class="command-grid" id="commandGrid">
+            <!-- Rolagem de Dados -->
+            <div class="command-card" data-category="dados">
+                <span class="category-tag">Dados</span>
+                <div class="card-header">
+                    <div class="icon">
+                        <i class="fas fa-dice"></i>
+                    </div>
+                    <h3 class="command-name">!roll / !r</h3>
+                </div>
+                <p class="command-desc">Realiza rolagens de dados no formato XdY (X dados de Y lados). Aceita modificadores matemáticos.</p>
+                <div class="example-box">
+                    <div class="example-title">Exemplos:</div>
+                    <code class="example-code">!r 1d20  // Rola um d20</code>
+                    <code class="example-code">!r 2d6+3  // Rola dois d6 e soma 3</code>
+                    <code class="example-code">!r 1d20+5 adv  // Rola com vantagem</code>
+                </div>
+            </div>
+            
+            <!-- Testes de Perícia -->
+            <div class="command-card" data-category="dados">
+                <span class="category-tag">Dados</span>
+                <div class="card-header">
+                    <div class="icon">
+                        <i class="fas fa-running"></i>
+                    </div>
+                    <h3 class="command-name">!check</h3>
+                </div>
+                <p class="command-desc">Realiza um teste de perícia usando sua ficha de personagem. O bot calcula automaticamente os modificadores.</p>
+                <div class="example-box">
+                    <div class="example-title">Exemplos:</div>
+                    <code class="example-code">!check percepção</code>
+                    <code class="example-code">!check furtividade adv  // Com vantagem</code>
+                    <code class="example-code">!check persuasão -dc 15  // Define CD</code>
+                </div>
+            </div>
+            
+            <!-- Iniciativa -->
+            <div class="command-card" data-category="combate">
+                <span class="category-tag">Combate</span>
+                <div class="card-header">
+                    <div class="icon">
+                        <i class="fas fa-swords"></i>
+                    </div>
+                    <h3 class="command-name">!init</h3>
+                </div>
+                <p class="command-desc">Comandos para gerenciar a iniciativa durante combates. Permite adicionar jogadores, NPCs e monstros.</p>
+                <div class="example-box">
+                    <div class="example-title">Exemplos:</div>
+                    <code class="example-code">!init begin  // Inicia um novo combate</code>
+                    <code class="example-code">!init join  // Entra na iniciativa</code>
+                    <code class="example-code">!init madd "Orc" -n 3  // Adiciona 3 orcs</code>
+                    <code class="example-code">!init next  // Avança para o próximo turno</code>
+                </div>
+            </div>
+            
+            <!-- Ataques -->
+            <div class="command-card" data-category="combate">
+                <span class="category-tag">Combate</span>
+                <div class="card-header">
+                    <div class="icon">
+                        <i class="fas fa-bow-arrow"></i>
+                    </div>
+                    <h3 class="command-name">!attack</h3>
+                </div>
+                <p class="command-desc">Realiza um ataque usando uma arma da sua ficha. Calcula acerto e dano automaticamente.</p>
+                <div class="example-box">
+                    <div class="example-title">Exemplos:</div>
+                    <code class="example-code">!attack "Espada Longa"</code>
+                    <code class="example-code">!attack "Arco Longo" -t "Goblin 1"  // Define alvo</code>
+                    <code class="example-code">!attack "Adaga" -rr 2  // Dois ataques</code>
+                </div>
+            </div>
+            
+            <!-- Gerenciamento de Personagem -->
+            <div class="command-card" data-category="personagem">
+                <span class="category-tag">Personagem</span>
+                <div class="card-header">
+                    <div class="icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h3 class="command-name">!character / !char</h3>
+                </div>
+                <p class="command-desc">Comandos para gerenciar sua ficha de personagem. Permite visualizar, alternar e configurar personagens.</p>
+                <div class="example-box">
+                    <div class="example-title">Exemplos:</div>
+                    <code class="example-code">!char  // Mostra seu personagem atual</code>
+                    <code class="example-code">!char list  // Lista seus personagens</code>
+                    <code class="example-code">!char switch "Nome"  // Troca de personagem</code>
+                </div>
+            </div>
+            
+            <!-- Pontos de Vida -->
+            <div class="command-card" data-category="personagem">
+                <span class="category-tag">Personagem</span>
+                <div class="card-header">
+                    <div class="icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3 class="command-name">!hp</h3>
+                </div>
+                <p class="command-desc">Gerencia os pontos de vida do seu personagem. Permite adicionar, remover ou definir valores.</p>
+                <div class="example-box">
+                    <div class="example-title">Exemplos:</div>
+                    <code class="example-code">!hp  // Mostra HP atual</code>
+                    <code class="example-code">!hp -5  // Toma 5 de dano</code>
+                    <code class="example-code">!hp +10  // Cura 10 pontos</code>
+                    <code class="example-code">!hp set 25  // Define HP para 25</code>
+                </div>
+            </div>
+            
+            <!-- Magias -->
+            <div class="command-card" data-category="magias">
+                <span class="category-tag">Magias</span>
+                <div class="card-header">
+                    <div class="icon">
+                        <i class="fas fa-wand-magic"></i>
+                    </div>
+                    <h3 class="command-name">!cast</h3>
+                </div>
+                <p class="command-descr">Conjura uma magia da sua ficha. Gasta slots automaticamente e calcula efeitos.</p>
+                <div class="example-box">
+                    <div class="example-title">Exemplos:</div>
+                    <code class="example-code">!cast "Bola de Fogo"</code>
+                    <code class="example-code">!cast "Cura" -l 3  // Conjura no nível 3</code>
+                    <code class="example-code">!cast "Raio de Gelo" -t "Goblin 1" "Goblin 2"  // Define alvos</code>
+                </div>
+            </div>
+            
+            <!-- Descansos -->
+            <div class="command-card" data-category="personagem">
+                <span class="category-tag">Utilitários</span>
+                <div class="card-header">
+                    <div class="icon">
+                        <i class="fas fa-campground"></i>
+                    </div>
+                    <h3 class="command-name">!rest</h3>
+                </div>
+                <p class="command-desc">Realiza descansos (curto ou longo) para recuperar recursos e pontos de vida.</p>
+                <div class="example-box">
+                    <div class="example-title">Exemplos:</div>
+                    <code class="example-code">!rest short  // Descanso curto</code>
+                    <code class="example-code">!rest long  // Descanso longo</code>
+                    <code class="example-code">!rest long -h  // Recupera todos os pontos de vida</code>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Guia Completo Avrae &copy; 2025 - Guilda Sinergy Nexus</p>
+            <p>Comandos e Flags - Atualizado para a versão mais recente</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Armazenar elementos importantes
+        const searchInput = document.getElementById('searchInput');
+        const categoriesContainer = document.getElementById('categoriesContainer');
+        const categoryButtons = document.querySelectorAll('.category-btn');
+        const commandGrid = document.getElementById('commandGrid');
+        const flagsGrid = document.getElementById('flagsGrid');
+        const conceptsSection = document.getElementById('conceptsSection');
+        const commandCards = document.querySelectorAll('.command-card');
+        const flagCards = document.querySelectorAll('.flag-card');
+        
+        // Estado atual
+        let currentCategory = 'all';
+        let currentSearchTerm = '';
+        
+        // Adicionar evento de clique nas categorias
+        categoryButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remover a classe ativa de todos os botões
+                categoryButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // Adicionar a classe ativa ao botão clicado
+                button.classList.add('active');
+                
+                // Obter a categoria do botão
+                const category = button.getAttribute('data-category');
+                currentCategory = category;
+                
+                // Filtrar os elementos
+                filterElements();
+            });
+        });
+        
+        // Adicionar evento de input na pesquisa
+        searchInput.addEventListener('input', (e) => {
+            currentSearchTerm = e.target.value.toLowerCase().trim();
+            filterElements();
+        });
+        
+        // Função para filtrar elementos
+        function filterElements() {
+            // Verificar se precisamos mostrar a seção de conceitos
+            const showConcepts = currentCategory === 'all' || 
+                                currentCategory === 'flags' || 
+                                (currentSearchTerm && conceptsSection.textContent.toLowerCase().includes(currentSearchTerm));
+            
+            conceptsSection.style.display = showConcepts ? 'block' : 'none';
+            
+            // Filtrar cartões de comandos
+            let visibleCommands = 0;
+            commandCards.forEach(card => {
+                const categoryMatch = currentCategory === 'all' || 
+                                    card.getAttribute('data-category') === currentCategory;
+                
+                const searchMatch = !currentSearchTerm || 
+                                  card.textContent.toLowerCase().includes(currentSearchTerm);
+                
+                if (categoryMatch && searchMatch) {
+                    card.style.display = 'block';
+                    visibleCommands++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            // Filtrar cartões de flags
+            let visibleFlags = 0;
+            flagCards.forEach(card => {
+                const categoryMatch = currentCategory === 'all' || 
+                                    currentCategory === 'flags' || 
+                                    card.getAttribute('data-category') === currentCategory;
+                
+                const searchMatch = !currentSearchTerm || 
+                                  card.textContent.toLowerCase().includes(currentSearchTerm);
+                
+                if (categoryMatch && searchMatch) {
+                    card.style.display = 'block';
+                    visibleFlags++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            // Mostrar mensagem se não houver resultados
+            showNoResultsMessage(visibleCommands, visibleFlags);
+        }
+        
+        // Função para mostrar mensagem de nenhum resultado
+        function showNoResultsMessage(visibleCommands, visibleFlags) {
+            // Remover mensagens anteriores
+            const existingMessage = document.querySelector('.no-results');
+            if (existingMessage) existingMessage.remove();
+            
+            // Verificar se não há resultados visíveis
+            if (visibleCommands === 0 && visibleFlags === 0 && 
+                !(currentCategory === 'flags' && conceptsSection.style.display === 'block')) {
+                
+                const noResults = document.createElement('div');
+                noResults.className = 'no-results';
+                noResults.innerHTML = `
+                    <i class="fas fa-search"></i>
+                    <h3>Nenhum resultado encontrado</h3>
+                    <p>Não encontramos comandos ou flags correspondentes à sua pesquisa. Tente usar termos diferentes ou selecione outra categoria.</p>
+                `;
+                
+                // Inserir após a seção de conceitos
+                conceptsSection.insertAdjacentElement('afterend', noResults);
+            }
+        }
+        
+        // Animação nos cards
+        document.querySelectorAll('.command-card, .flag-card').forEach(card => {
+            card.addEventListener('click', () => {
+                card.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    card.style.transform = '';
+                }, 200);
+            });
+        });
+        
+        // Filtrar inicialmente
+        filterElements();
+    </script>
+</body>
+</html>
